@@ -24,6 +24,7 @@ link .config/i3/lock.sh
 link .config/i3/powermenu.sh
 link .config/i3/vol-up.sh
 link .config/i3/workspace-icons.json
+link .config/i3/monitor.sh
 link .config/polybar/config.ini
 link .config/polybar/launch.sh
 link .config/polybar/cpu-mem-bar
@@ -35,6 +36,9 @@ link .config/rofi/config.rasi
 link .config/picom/picom.conf
 link .config/dunst/dunstrc
 link .Xresources
+link .gtkrc-2.0
+link .config/gtk-3.0/settings.ini
+link .config/gtk-4.0/settings.ini
 
 # Nvim — link entire directory
 dst="$HOME/.config/nvim"

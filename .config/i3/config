@@ -256,6 +256,57 @@ hide_edge_borders smart
 gaps inner 0
 gaps outer 0
 
+# ─── External monitor ───
+exec --no-startup-id ~/.config/i3/monitor.sh right
+bindsym $mod+Shift+m exec --no-startup-id ~/.config/i3/monitor.sh right
+bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/monitor.sh off
+
+# ─── Workspace assignments ───
+# Terminals → 1
+assign [class="Alacritty"] $ws1
+assign [class="kitty"] $ws1
+assign [class="xterm"] $ws1
+
+# Browsers → 2
+assign [class="firefox"] $ws2
+assign [class="Firefox"] $ws2
+assign [class="Brave-browser"] $ws2
+assign [class="Google-chrome"] $ws2
+assign [class="Chromium"] $ws2
+assign [class="falkon"] $ws2
+assign [class="Falkon"] $ws2
+
+# IDEs → 3
+assign [class="code"] $ws3
+assign [class="Code"] $ws3
+assign [class="jetbrains-idea"] $ws3
+assign [class="jetbrains-pycharm"] $ws3
+assign [class="jetbrains-webstorm"] $ws3
+assign [class="jetbrains-clion"] $ws3
+assign [class="jetbrains-goland"] $ws3
+assign [class="Emacs"] $ws3
+assign [class="Neovide"] $ws3
+
+# ─── Floating rules ───
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="dialog"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Blueman-manager"] floating enable
+for_window [class="nm-connection-editor"] floating enable
+for_window [class="Gnome-calculator"] floating enable
+for_window [class="gnome-system-monitor"] floating enable
+for_window [class="Gnome-system-monitor"] floating enable
+for_window [class="flameshot"] floating enable
+for_window [class="Galculator"] floating enable
+for_window [class="Xarchiver"] floating enable
+for_window [title="File Transfer*"] floating enable
+for_window [title="Open File"] floating enable
+for_window [title="Save As"] floating enable
+
 # Disable default i3bar
 bar {
         mode invisible
