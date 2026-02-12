@@ -31,8 +31,12 @@ Minimal, resource-friendly i3 desktop environment for Fedora with Catppuccin Moc
 
 ```bash
 sudo dnf install i3 polybar alacritty conky rofi picom dunst feh \
-    brightnessctl flameshot ImageMagick i3lock neovim jetbrains-mono-fonts-all
+    brightnessctl flameshot ImageMagick i3lock neovim jetbrains-mono-fonts-all \
+    mpv cmus btop zathura zathura-pdf-mupdf podman podman-compose
 pip install --user autotiling i3-workspace-names-daemon
+# Yazi (file manager):
+curl -fL https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip -o /tmp/yazi.zip
+unzip /tmp/yazi.zip -d /tmp && cp /tmp/yazi-x86_64-unknown-linux-gnu/{yazi,ya} ~/.local/bin/
 ```
 
 Install JetBrains Mono Nerd Font (for workspace icons):
@@ -83,6 +87,151 @@ Press `Mod+Shift+r` to restart i3 and apply everything.
 | `Mod+Shift+e` | Power menu |
 | `Mod+Shift+c` | Reload config |
 | `Mod+Shift+r` | Restart i3 |
+| `Mod+Shift+m` | External monitor on (right) |
+| `Mod+Shift+n` | External monitor off |
+
+## Workspaces
+
+| Workspace | Contents |
+|-----------|----------|
+| **1** | Browsers |
+| **2** | IDEs |
+| **3** | Terminals |
+| **4** | Misc |
+| **9** | Messaging (Slack, Discord, Telegram) |
+
+## Tool cheatsheets
+
+### yazi — file manager
+
+Launch with `y` (shell wrapper that cds on quit).
+
+| Key | Action |
+|-----|--------|
+| `h` / `l` | Parent dir / Enter dir |
+| `j` / `k` | Move down / up |
+| `Enter` | Open file (uses xdg-open) |
+| `Space` | Select file |
+| `y` | Yank (copy) selected |
+| `x` | Cut selected |
+| `p` | Paste |
+| `d` | Trash |
+| `D` | Delete permanently |
+| `a` | Create file |
+| `A` | Create directory |
+| `r` | Rename |
+| `c` | Change directory (type path) |
+| `.` | Toggle hidden files |
+| `/` | Search |
+| `z` | Jump (fzf) |
+| `q` | Quit |
+| `~` | Go to home |
+| `Tab` | Switch pane |
+
+### cmus — music player
+
+Launch with `cmus`.
+
+| Key | Action |
+|-----|--------|
+| `5` | File browser (add music) |
+| `a` | Add file/dir to library |
+| `1` | Artist/Album view |
+| `2` | Library (all tracks) |
+| `3` | Playlist |
+| `Enter` | Play selected |
+| `c` | Pause/resume |
+| `x` | Play |
+| `v` | Stop |
+| `b` | Next track |
+| `z` | Previous track |
+| `+` / `-` | Volume up / down |
+| `s` | Toggle shuffle |
+| `r` | Toggle repeat |
+| `Right` / `Left` | Seek +5s / -5s |
+| `q` | Quit |
+
+First time: press `5`, navigate to your music folder, press `a` to add it.
+
+### mpv — video player
+
+Launch with `mpv <file>` or open from yazi.
+
+| Key | Action |
+|-----|--------|
+| `Space` | Pause/resume |
+| `Left` / `Right` | Seek -5s / +5s |
+| `Up` / `Down` | Seek +60s / -60s |
+| `9` / `0` | Volume down / up |
+| `m` | Mute |
+| `f` | Fullscreen |
+| `s` | Screenshot |
+| `[` / `]` | Speed -10% / +10% |
+| `l` | Set A-B loop |
+| `j` | Cycle subtitles |
+| `q` | Quit |
+
+### zathura — PDF viewer
+
+Launch with `zathura <file.pdf>` or open from yazi.
+
+| Key | Action |
+|-----|--------|
+| `j` / `k` | Scroll down / up |
+| `h` / `l` | Scroll left / right |
+| `J` / `K` | Next page / prev page |
+| `gg` | First page |
+| `G` | Last page |
+| `5G` | Go to page 5 |
+| `+` / `-` | Zoom in / out |
+| `=` | Fit page |
+| `a` | Fit height |
+| `s` | Fit width |
+| `/` | Search |
+| `n` / `N` | Next / prev search result |
+| `d` | Dual page mode |
+| `r` | Rotate |
+| `Tab` | Table of contents |
+| `q` | Quit |
+
+### btop — system monitor
+
+Launch with `btop`.
+
+| Key | Action |
+|-----|--------|
+| `h` | Help |
+| `Esc` | Back / menu |
+| `Up` / `Down` | Select process |
+| `Enter` | Show process details |
+| `t` | Tree view |
+| `k` | Kill selected process |
+| `f` | Filter processes |
+| `/` | Search processes |
+| `P` | Sort by CPU |
+| `M` | Sort by memory |
+| `e` | Toggle net/disk/proc panels |
+| `q` | Quit |
+
+### podman — container runtime (Docker replacement)
+
+Same commands as Docker:
+
+```bash
+podman run -it ubuntu bash          # run container
+podman ps                           # list running
+podman ps -a                        # list all
+podman images                       # list images
+podman build -t myapp .             # build from Dockerfile
+podman-compose up                   # docker-compose replacement
+podman-compose up -d                # detached
+podman-compose down                 # stop and remove
+podman stop <id>                    # stop container
+podman rm <id>                      # remove container
+podman rmi <image>                  # remove image
+podman logs <id>                    # view logs
+podman exec -it <id> bash           # shell into container
+```
 
 ## Resource usage
 
