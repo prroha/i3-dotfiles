@@ -35,10 +35,19 @@ link .config/picom/picom.conf
 link .config/dunst/dunstrc
 link .Xresources
 
+# Nvim — link entire directory
+dst="$HOME/.config/nvim"
+if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+    echo "  backup: $dst -> ${dst}.bak"
+    mv "$dst" "${dst}.bak"
+fi
+ln -sf "$DOTFILES/.config/nvim" "$dst"
+echo "  linked: $dst"
+
 echo
 echo "Done! Reload i3 with Mod+Shift+r"
 echo
 echo "Required packages (Fedora):"
-echo "  sudo dnf install i3 polybar alacritty conky rofi picom dunst feh brightnessctl flameshot ImageMagick i3lock"
+echo "  sudo dnf install i3 polybar alacritty conky rofi picom dunst feh brightnessctl flameshot ImageMagick i3lock neovim"
 echo "  pip install --user autotiling"
 echo "  Install JetBrains Mono: sudo dnf install jetbrains-mono-fonts-all"

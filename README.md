@@ -13,6 +13,7 @@ Minimal, resource-friendly i3 desktop environment for Fedora with Catppuccin Moc
 | **Rofi** | `.config/rofi/config.rasi` | App launcher / window switcher |
 | **Picom** | `.config/picom/picom.conf` | Compositor (vsync, fading, rounded corners) |
 | **Dunst** | `.config/dunst/dunstrc` | Notification daemon |
+| **Neovim** | `.config/nvim/` | LazyVim config with plugins |
 | **Xresources** | `.Xresources` | HiDPI settings (144 DPI) |
 
 ### Helper scripts
@@ -30,7 +31,7 @@ Minimal, resource-friendly i3 desktop environment for Fedora with Catppuccin Moc
 
 ```bash
 sudo dnf install i3 polybar alacritty conky rofi picom dunst feh \
-    brightnessctl flameshot ImageMagick i3lock jetbrains-mono-fonts-all
+    brightnessctl flameshot ImageMagick i3lock neovim jetbrains-mono-fonts-all
 pip install --user autotiling
 ```
 
