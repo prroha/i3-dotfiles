@@ -1,0 +1,38 @@
+[global]
+    monitor = 0
+    follow = mouse
+    width = 350
+    height = 100
+    origin = top-right
+    offset = 20x40
+    notification_limit = 5
+    padding = 12
+    horizontal_padding = 16
+    frame_width = 2
+    frame_color = "#b4befe"
+    separator_height = 2
+    separator_color = frame
+    font = JetBrains Mono 10
+    corner_radius = 8
+    icon_position = left
+    max_icon_size = 48
+    mouse_left_click = close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
+    frame_color = "#89b4fa"
+    timeout = 5
+
+[urgency_normal]
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
+    frame_color = "#b4befe"
+    timeout = 10
+
+[urgency_critical]
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
+    frame_color = "#f38ba8"
+    timeout = 0

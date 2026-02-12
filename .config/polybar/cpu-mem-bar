@@ -1,0 +1,55 @@
+#!/bin/bash
+# CPU = overline (proportional), MEM = underline (proportional), text between
+
+# CPU
+read -r _ a b c idle _ < /proc/stat
+total=$((a+b+c+idle))
+sleep 0.2
+read -r _ a2 b2 c2 idle2 _ < /proc/stat
+total2=$((a2+b2+c2+idle2))
+d_idle=$((idle2-idle))
+d_total=$((total2-total))
+cpu=$(( (d_total-d_idle) * 100 / (d_total > 0 ? d_total : 1) ))
+
+# Memory
+tm=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+am=$(awk '/MemAvailable/ {print $2}' /proc/meminfo)
+mem=$(( (tm-am) * 100 / tm ))
+
+# Dynamic colors
+ccolor() {
+    if [ "$1" -ge 80 ]; then echo "#f38ba8"
+    elif [ "$1" -ge 50 ]; then echo "#f9e2af"
+    else echo "#fab387"; fi
+}
+mcolor() {
+    if [ "$1" -ge 90 ]; then echo "#f38ba8"
+    elif [ "$1" -ge 75 ]; then echo "#f9e2af"
+    else echo "#94e2d5"; fi
+}
+
+C=$(ccolor $cpu)
+M=$(mcolor $mem)
+E="#313244"
+
+# Build label text, pad to fixed width
+label=$(printf "C%d%% M%d%%" "$cpu" "$mem")
+W=${#label}
+
+cf=$((cpu * W / 100))
+mf=$((mem * W / 100))
+
+# Find where M starts in the label
+mpos=$(expr index "$label" M)
+mpos=$((mpos - 1))
+
+out=""
+for ((i=0; i<W; i++)); do
+    ch="${label:$i:1}"
+    if ((i < cf)); then ol="%{o${C}}%{+o}"; else ol="%{o${E}}%{+o}"; fi
+    if ((i < mf)); then ul="%{u${M}}%{+u}"; else ul="%{u${E}}%{+u}"; fi
+    if ((i < mpos)); then fc="%{F${C}}"; else fc="%{F${M}}"; fi
+    out+="${ol}${ul}${fc}${ch}%{F-}%{-o}%{-u}"
+done
+
+echo "${out}"

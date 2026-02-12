@@ -1,0 +1,33 @@
+#!/bin/bash
+bat=/sys/class/power_supply/BAT0
+if [ ! -d "$bat" ]; then exit 0; fi
+
+pct=$(cat "$bat/capacity")
+status=$(cat "$bat/status")
+
+# Vertical bar based on percentage
+bars=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+idx=$((pct * 7 / 100))
+((idx > 7)) && idx=7
+bar="${bars[$idx]}"
+
+# Bar color based on level
+if [ "$pct" -lt 15 ]; then
+    BC="#f38ba8"
+elif [ "$pct" -lt 40 ]; then
+    BC="#f9e2af"
+elif [ "$pct" -lt 75 ]; then
+    BC="#fab387"
+else
+    BC="#a6e3a1"
+fi
+
+if [ "$status" = "Charging" ]; then
+    echo "%{F#a6e3a1}${pct}% %{F${BC}}${bar}%{O-14px}%{F#89dceb}⚡%{F-}"
+elif [ "$status" = "Full" ]; then
+    echo "%{F#a6e3a1}FUL ${bar}%{F-}"
+elif [ "$pct" -lt 15 ]; then
+    echo "%{F#f38ba8}LOW ${pct}% ${bar}%{F-}"
+else
+    echo "%{F#bac2de}${pct}%%{F-} %{F${BC}}${bar}%{F-}"
+fi

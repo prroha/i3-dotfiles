@@ -1,0 +1,80 @@
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    font: "JetBrains Mono 12";
+    display-drun: "Apps";
+    display-run: "Run";
+    display-window: "Windows";
+}
+
+* {
+    base:      #1e1e2eff;
+    mantle:    #181825ff;
+    crust:     #11111bff;
+    text:      #cdd6f4ff;
+    subtext0:  #a6adc8ff;
+    overlay0:  #6c7086ff;
+    surface0:  #313244ff;
+    surface1:  #45475aff;
+    blue:      #89b4faff;
+    lavender:  #b4befeff;
+    red:       #f38ba8ff;
+
+    background-color: @base;
+    text-color: @text;
+}
+
+window {
+    width: 500px;
+    border: 2px;
+    border-color: @lavender;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+inputbar {
+    children: [prompt, entry];
+    spacing: 10px;
+    padding: 8px 12px;
+    background-color: @surface0;
+    border-radius: 6px;
+}
+
+prompt {
+    text-color: @blue;
+    background-color: transparent;
+}
+
+entry {
+    placeholder: "Search...";
+    placeholder-color: @overlay0;
+    background-color: transparent;
+}
+
+listview {
+    lines: 8;
+    spacing: 4px;
+    padding: 8px 0 0 0;
+    background-color: transparent;
+}
+
+element {
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: transparent;
+}
+
+element selected {
+    background-color: @surface1;
+    text-color: @lavender;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+}
+
+element-icon {
+    size: 20px;
+    background-color: transparent;
+}
