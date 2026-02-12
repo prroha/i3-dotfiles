@@ -51,6 +51,9 @@ exec --no-startup-id brightnessctl set 40%
 # Shortcuts cheatsheet overlay
 exec --no-startup-id conky -c ~/.config/conky/i3-shortcuts.conf
 
+# Dynamic workspace icons
+exec_always --no-startup-id ~/.local/bin/i3-workspace-names-daemon -config-path ~/.config/i3/workspace-icons.json -d " " -u -n
+
 # Brightness controls
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-

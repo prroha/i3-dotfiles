@@ -23,6 +23,7 @@ link .config/i3/config
 link .config/i3/lock.sh
 link .config/i3/powermenu.sh
 link .config/i3/vol-up.sh
+link .config/i3/workspace-icons.json
 link .config/polybar/config.ini
 link .config/polybar/launch.sh
 link .config/polybar/cpu-mem-bar
@@ -49,5 +50,8 @@ echo "Done! Reload i3 with Mod+Shift+r"
 echo
 echo "Required packages (Fedora):"
 echo "  sudo dnf install i3 polybar alacritty conky rofi picom dunst feh brightnessctl flameshot ImageMagick i3lock neovim"
-echo "  pip install --user autotiling"
-echo "  Install JetBrains Mono: sudo dnf install jetbrains-mono-fonts-all"
+echo "  pip install --user autotiling i3-workspace-names-daemon"
+echo "  Install JetBrains Mono Nerd Font:"
+echo "    mkdir -p ~/.local/share/fonts"
+echo "    curl -fLO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
+echo "    tar xf JetBrainsMono.tar.xz -C ~/.local/share/fonts/ && fc-cache -f"

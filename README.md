@@ -6,7 +6,7 @@ Minimal, resource-friendly i3 desktop environment for Fedora with Catppuccin Moc
 
 | Component | Config | Purpose |
 |-----------|--------|---------|
-| **i3** | `.config/i3/config` | Window manager with vim-style keys, autotiling |
+| **i3** | `.config/i3/config` | Window manager with vim-style keys, autotiling, dynamic workspace icons |
 | **Polybar** | `.config/polybar/` | Status bar with stacked CPU/MEM and BRI/VOL bars |
 | **Alacritty** | `.config/alacritty/alacritty.toml` | Terminal (Catppuccin, JetBrains Mono 14) |
 | **Conky** | `.config/conky/i3-shortcuts.conf` | Always-visible shortcuts cheatsheet |
@@ -32,7 +32,14 @@ Minimal, resource-friendly i3 desktop environment for Fedora with Catppuccin Moc
 ```bash
 sudo dnf install i3 polybar alacritty conky rofi picom dunst feh \
     brightnessctl flameshot ImageMagick i3lock neovim jetbrains-mono-fonts-all
-pip install --user autotiling
+pip install --user autotiling i3-workspace-names-daemon
+```
+
+Install JetBrains Mono Nerd Font (for workspace icons):
+```bash
+mkdir -p ~/.local/share/fonts
+curl -fLO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
+tar xf JetBrainsMono.tar.xz -C ~/.local/share/fonts/ && fc-cache -f
 ```
 
 ### 2. Clone and link
