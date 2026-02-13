@@ -160,6 +160,9 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
+# Pin workspace 5 to external monitor (if connected)
+workspace $ws5 output HDMI-1 DP-1 DP-2 eDP-1
+
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
@@ -260,43 +263,45 @@ gaps outer 0
 exec --no-startup-id ~/.config/i3/monitor.sh right
 bindsym $mod+Shift+m exec --no-startup-id ~/.config/i3/monitor.sh right
 bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/monitor.sh off
+bindsym $mod+Ctrl+l move workspace to output right
+bindsym $mod+Ctrl+h move workspace to output left
 
 # ─── Workspace assignments ───
 # Browsers → 1
-assign [class="firefox"] $ws1
-assign [class="Firefox"] $ws1
-assign [class="Brave-browser"] $ws1
-assign [class="Google-chrome"] $ws1
-assign [class="Chromium"] $ws1
-assign [class="falkon"] $ws1
-assign [class="Falkon"] $ws1
+assign [class="firefox"] → number $ws1
+assign [class="Firefox"] → number $ws1
+assign [class="Brave-browser"] → number $ws1
+assign [class="Google-chrome"] → number $ws1
+assign [class="Chromium"] → number $ws1
+assign [class="falkon"] → number $ws1
+assign [class="Falkon"] → number $ws1
 
 # IDEs → 2
-assign [class="code"] $ws2
-assign [class="Code"] $ws2
-assign [class="jetbrains-idea"] $ws2
-assign [class="jetbrains-pycharm"] $ws2
-assign [class="jetbrains-webstorm"] $ws2
-assign [class="jetbrains-clion"] $ws2
-assign [class="jetbrains-goland"] $ws2
-assign [class="Emacs"] $ws2
-assign [class="Neovide"] $ws2
+assign [class="code"] → number $ws2
+assign [class="Code"] → number $ws2
+assign [class="jetbrains-idea"] → number $ws2
+assign [class="jetbrains-pycharm"] → number $ws2
+assign [class="jetbrains-webstorm"] → number $ws2
+assign [class="jetbrains-clion"] → number $ws2
+assign [class="jetbrains-goland"] → number $ws2
+assign [class="Emacs"] → number $ws2
+assign [class="Neovide"] → number $ws2
 
 # Terminals → 3
-assign [class="Alacritty"] $ws3
-assign [class="kitty"] $ws3
-assign [class="xterm"] $ws3
+assign [class="Alacritty"] → number $ws3
+assign [class="kitty"] → number $ws3
+assign [class="xterm"] → number $ws3
 
 # Messaging → 9
-assign [class="Slack"] $ws9
-assign [class="discord"] $ws9
-assign [class="Discord"] $ws9
-assign [class="TelegramDesktop"] $ws9
-assign [class="Signal"] $ws9
-assign [class="teams-for-linux"] $ws9
-assign [class="Microsoft Teams"] $ws9
-assign [class="Ferdium"] $ws9
-assign [class="whatsapp-for-linux"] $ws9
+assign [class="Slack"] → number $ws9
+assign [class="discord"] → number $ws9
+assign [class="Discord"] → number $ws9
+assign [class="TelegramDesktop"] → number $ws9
+assign [class="Signal"] → number $ws9
+assign [class="teams-for-linux"] → number $ws9
+assign [class="Microsoft Teams"] → number $ws9
+assign [class="Ferdium"] → number $ws9
+assign [class="whatsapp-for-linux"] → number $ws9
 
 # ─── Floating rules ───
 for_window [window_role="pop-up"] floating enable
