@@ -21,10 +21,35 @@ echo
 
 # ─── Install packages ───
 echo "Installing required packages..."
-sudo dnf install -y i3 polybar alacritty conky rofi picom dunst feh \
-    brightnessctl flameshot ImageMagick i3lock neovim yazi jq zoxide
 
-pip install --user autotiling i3-workspace-names-daemon
+# Core packages (install one by one so one failure doesn't block the rest)
+PACKAGES=(
+    i3 polybar alacritty conky rofi picom dunst feh
+    brightnessctl flameshot ImageMagick i3lock neovim
+    jq zoxide pip
+)
+
+for pkg in "${PACKAGES[@]}"; do
+    if ! rpm -q "$pkg" &>/dev/null; then
+        echo "  installing: $pkg"
+        sudo dnf install -y "$pkg" 2>/dev/null || echo "  WARNING: $pkg not found in repos, skipping"
+    else
+        echo "  already installed: $pkg"
+    fi
+done
+
+# Yazi — might not be in default repos
+if ! command -v yazi &>/dev/null; then
+    echo "  installing: yazi"
+    sudo dnf install -y yazi 2>/dev/null || {
+        echo "  yazi not in repos, installing from GitHub..."
+        curl -fL https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip -o /tmp/yazi.zip
+        unzip -o /tmp/yazi.zip -d /tmp && cp /tmp/yazi-x86_64-unknown-linux-gnu/{yazi,ya} ~/.local/bin/
+        rm -f /tmp/yazi.zip
+    }
+fi
+
+pip install --user autotiling i3-workspace-names-daemon || echo "  WARNING: pip install failed, try: pip install --user autotiling i3-workspace-names-daemon"
 
 # ─── Install lazydocker ───
 if ! command -v lazydocker &>/dev/null; then
