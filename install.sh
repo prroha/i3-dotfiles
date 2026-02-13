@@ -85,6 +85,17 @@ if ! command -v yazi &>/dev/null; then
     echo "  yazi installed"
 fi
 
+# ─── Lazygit (needed by LazyVim) ───
+if ! command -v lazygit &>/dev/null; then
+    echo "==> Installing lazygit from GitHub..."
+    LAZYGIT_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest | grep -oP '"tag_name":\s*"v\K[^"]+')
+    curl -fL "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" -o /tmp/lazygit.tar.gz
+    tar xf /tmp/lazygit.tar.gz -C /tmp lazygit
+    cp /tmp/lazygit ~/.local/bin/
+    rm -f /tmp/lazygit.tar.gz /tmp/lazygit
+    echo "  lazygit installed"
+fi
+
 # ─── Lazydocker ───
 if ! command -v lazydocker &>/dev/null; then
     echo "==> Installing lazydocker..."
