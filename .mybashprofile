@@ -8,20 +8,24 @@ fi
 # LazyVim alias
 alias lazy='NVIM_APPNAME=lazynvim nvim'
 
-# Astrovim alias
-alias astro='NVIM_APPNAME=astronvim nvim'
-
 # Optional software (only alias if installed)
 [ -x /opt/intellij/bin/idea ] && alias idea='/opt/intellij/bin/idea'
 [ -x /opt/Rider/bin/rider.sh ] && alias rider='/opt/Rider/bin/rider.sh'
 [ -f /opt/mendeley.AppImage ] && alias mendeley='/opt/mendeley.AppImage'
 [ -d /opt/mongodb/bin ] && export PATH="/opt/mongodb/bin:$PATH"
 
-# xdg-open
-export open='xdg-open'
+# xdg-open shortcut
+alias open='xdg-open'
 
-#Add ssh key
-eval "$(keychain --eval --agents ssh github-ssh-key)"
+# Add ssh key (only if keychain and key exist)
+if command -v keychain &>/dev/null; then
+    for key in ~/.ssh/id_* ~/.ssh/*-ssh-key; do
+        if [ -f "$key" ] && [[ "$key" != *.pub ]]; then
+            eval "$(keychain --eval --agents ssh "$(basename "$key")")"
+            break
+        fi
+    done
+fi
 
 #Map podman to docker
 alias docker=podman
