@@ -2,16 +2,18 @@
 # Auto-detect and configure external monitor
 # Usage: monitor.sh [left|right|above|mirror|off]
 
-INTERNAL="eDP-1"
+# Auto-detect internal display (eDP-*, LVDS-*)
+INTERNAL=$(xrandr | grep -oP '^(eDP|LVDS)-?\d+(?= connected)' | head -1)
+INTERNAL="${INTERNAL:-eDP-1}"
 EXTERNAL=""
 
-# Find connected external monitor
-for output in HDMI-1 DP-1 DP-2 DP-3 DP-4; do
-    if xrandr | grep "^$output connected" &>/dev/null; then
+# Find connected external monitor (anything connected that isn't internal)
+while read -r output; do
+    if [ "$output" != "$INTERNAL" ]; then
         EXTERNAL="$output"
         break
     fi
-done
+done < <(xrandr | grep ' connected' | awk '{print $1}')
 
 if [ -z "$EXTERNAL" ]; then
     # No external monitor — ensure internal is on

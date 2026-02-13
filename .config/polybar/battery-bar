@@ -1,6 +1,10 @@
 #!/bin/bash
-bat=/sys/class/power_supply/BAT0
-if [ ! -d "$bat" ]; then exit 0; fi
+# Auto-detect battery device
+bat=""
+for b in /sys/class/power_supply/BAT*; do
+    [ -d "$b" ] && bat="$b" && break
+done
+[ -z "$bat" ] && exit 0
 
 pct=$(cat "$bat/capacity")
 status=$(cat "$bat/status")

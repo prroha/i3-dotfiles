@@ -1,21 +1,23 @@
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
-export PATH=$JAVA_HOME/bin:$PATH
+# Java (auto-detect latest openjdk)
+JAVA_DIR=$(ls -d /usr/lib/jvm/java-*-openjdk 2>/dev/null | sort -V | tail -1)
+if [ -n "$JAVA_DIR" ]; then
+    export JAVA_HOME="$JAVA_DIR"
+    export PATH=$JAVA_HOME/bin:$PATH
+fi
 
 # LazyVim alias
 alias lazy='NVIM_APPNAME=lazynvim nvim'
 
 # Astrovim alias
 alias astro='NVIM_APPNAME=astronvim nvim'
-#Intellij
-alias idea='/opt/intellij/bin/idea'
-#Rider
-alias rider='/opt/Rider/bin/rider.sh'
 
-#mendeley
-alias mendeley='/opt/mendeley.AppImage'
-#mongodb
-export PATH="/opt/mongodb/bin:$PATH"
-#xdg-open
+# Optional software (only alias if installed)
+[ -x /opt/intellij/bin/idea ] && alias idea='/opt/intellij/bin/idea'
+[ -x /opt/Rider/bin/rider.sh ] && alias rider='/opt/Rider/bin/rider.sh'
+[ -f /opt/mendeley.AppImage ] && alias mendeley='/opt/mendeley.AppImage'
+[ -d /opt/mongodb/bin ] && export PATH="/opt/mongodb/bin:$PATH"
+
+# xdg-open
 export open='xdg-open'
 
 #Add ssh key

@@ -19,34 +19,28 @@ link() {
 echo "Installing dotfiles from $DOTFILES"
 echo
 
+mkdir -p ~/.local/bin
+
 # ─── Install packages ───
 echo "Installing required packages..."
 
-# Core packages (install one by one so one failure doesn't block the rest)
 PACKAGES=(
     i3 polybar alacritty conky rofi picom dunst feh
     brightnessctl flameshot ImageMagick i3lock neovim
-    jq zoxide pip
+    jq zoxide python3-pip
 )
 
-for pkg in "${PACKAGES[@]}"; do
-    if ! rpm -q "$pkg" &>/dev/null; then
-        echo "  installing: $pkg"
-        sudo dnf install -y "$pkg" 2>/dev/null || echo "  WARNING: $pkg not found in repos, skipping"
-    else
-        echo "  already installed: $pkg"
-    fi
-done
+# All packages are in default Fedora repos — install in one go
+sudo dnf install -y "${PACKAGES[@]}"
 
-# Yazi — might not be in default repos
+# Yazi — not in default repos, install from GitHub
 if ! command -v yazi &>/dev/null; then
-    echo "  installing: yazi"
-    sudo dnf install -y yazi 2>/dev/null || {
-        echo "  yazi not in repos, installing from GitHub..."
-        curl -fL https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip -o /tmp/yazi.zip
-        unzip -o /tmp/yazi.zip -d /tmp && cp /tmp/yazi-x86_64-unknown-linux-gnu/{yazi,ya} ~/.local/bin/
-        rm -f /tmp/yazi.zip
-    }
+    echo "  Installing yazi from GitHub..."
+    mkdir -p ~/.local/bin
+    curl -fL https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip -o /tmp/yazi.zip
+    unzip -o /tmp/yazi.zip -d /tmp && cp /tmp/yazi-x86_64-unknown-linux-gnu/{yazi,ya} ~/.local/bin/
+    rm -f /tmp/yazi.zip
+    echo "  yazi installed"
 fi
 
 pip install --user autotiling i3-workspace-names-daemon || echo "  WARNING: pip install failed, try: pip install --user autotiling i3-workspace-names-daemon"
