@@ -46,7 +46,7 @@ if ! sudo dnf install -y "${PACKAGES[@]}"; then
     echo
     echo "  Bulk install failed, retrying individually..."
     for pkg in "${PACKAGES[@]}"; do
-        sudo dnf install -y "$pkg" 2>/dev/null || echo "  WARNING: $pkg not found, skipping"
+        sudo dnf install -y "$pkg" || echo "  WARNING: $pkg not found, skipping"
     done
 fi
 
@@ -56,7 +56,7 @@ echo "==> Detecting GPU..."
 # AMD / Intel (mesa)
 if lspci | grep -qi "amd\|radeon\|intel.*graphics"; then
     echo "  AMD/Intel GPU detected, installing mesa drivers..."
-    sudo dnf install -y mesa-dri-drivers mesa-vulkan-drivers 2>/dev/null || echo "  WARNING: mesa drivers install failed"
+    sudo dnf install -y mesa-dri-drivers mesa-vulkan-drivers || echo "  WARNING: mesa drivers install failed"
 fi
 
 # NVIDIA
@@ -68,7 +68,7 @@ if lspci | grep -qi "nvidia"; then
             "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
             "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
     fi
-    sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia 2>/dev/null || echo "  WARNING: NVIDIA driver install failed"
+    sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia || echo "  WARNING: NVIDIA driver install failed"
     echo "  NOTE: Reboot required for NVIDIA drivers to load"
 fi
 
