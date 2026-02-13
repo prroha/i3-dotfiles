@@ -48,8 +48,8 @@ exec_always --no-startup-id ~/.local/bin/autotiling
 # Set brightness on startup (requires brightnessctl: sudo dnf install brightnessctl)
 exec --no-startup-id brightnessctl set 40%
 
-# Shortcuts cheatsheet overlay
-exec --no-startup-id conky -c ~/.config/conky/i3-shortcuts.conf
+# Shortcuts cheatsheet overlay (set-dpi.sh runs first so conky gets correct DPI)
+exec --no-startup-id "~/.config/i3/set-dpi.sh && conky -c ~/.config/conky/i3-shortcuts.conf"
 
 # Dynamic workspace icons
 exec_always --no-startup-id ~/.local/bin/i3-workspace-names-daemon -config-path ~/.config/i3/workspace-icons.json -d " " -u -n
@@ -58,8 +58,7 @@ exec_always --no-startup-id ~/.local/bin/i3-workspace-names-daemon -config-path 
 bindsym XF86MonBrightnessUp exec --no-startup-id "brightnessctl set +5% && polybar-msg action brivol hook 0"
 bindsym XF86MonBrightnessDown exec --no-startup-id "brightnessctl set 5%- && polybar-msg action brivol hook 0"
 
-# Auto-detect DPI and apply Xresources
-exec --no-startup-id ~/.config/i3/set-dpi.sh
+# DPI is set via the conky exec line above (set-dpi.sh runs before conky)
 
 # Volume controls (capped at 100% to prevent speaker damage)
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/vol-up.sh

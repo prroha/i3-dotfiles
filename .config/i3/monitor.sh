@@ -2,9 +2,15 @@
 # Auto-detect and configure external monitor
 # Usage: monitor.sh [left|right|above|mirror|off]
 
-# Auto-detect internal display (eDP-*, LVDS-*)
-INTERNAL=$(xrandr | grep -oP '^(eDP|LVDS)-?\d+(?= connected)' | head -1)
-INTERNAL="${INTERNAL:-eDP-1}"
+# Auto-detect internal display (eDP-*, LVDS-*, including NVIDIA Optimus eDP-1-1)
+INTERNAL=$(xrandr | grep -oP '^(eDP|LVDS)-?[\d-]+(?= connected)' | head -1)
+
+if [ -z "$INTERNAL" ]; then
+    # Desktop (no eDP/LVDS) — use the primary monitor as "internal"
+    INTERNAL=$(xrandr | grep " connected primary" | cut -d" " -f1)
+    INTERNAL=${INTERNAL:-$(xrandr | grep " connected" | head -1 | cut -d" " -f1)}
+fi
+
 EXTERNAL=""
 
 # Find connected external monitor (anything connected that isn't internal)
