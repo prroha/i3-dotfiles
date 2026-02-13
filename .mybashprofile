@@ -1,0 +1,54 @@
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+
+# LazyVim alias
+alias lazy='NVIM_APPNAME=lazynvim nvim'
+
+# Astrovim alias
+alias astro='NVIM_APPNAME=astronvim nvim'
+#Intellij
+alias idea='/opt/intellij/bin/idea'
+#Rider
+alias rider='/opt/Rider/bin/rider.sh'
+
+#mendeley
+alias mendeley='/opt/mendeley.AppImage'
+#mongodb
+export PATH="/opt/mongodb/bin:$PATH"
+#xdg-open
+export open='xdg-open'
+
+#Add ssh key
+eval "$(keychain --eval --agents ssh github-ssh-key)"
+
+#Map podman to docker
+alias docker=podman
+alias docker-compose=podman-compose
+
+# Yazi file manager
+alias dir='yazi'
+
+# Yazi: cd to last directory on quit (press q)
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+# Zoxide — smarter cd (use 'z' instead of 'cd')
+eval "$(zoxide init bash)"
+
+# Lazydocker (via Podman socket)
+export DOCKER_HOST=unix:///run/user/$(id -u)/podman/podman.sock
+alias lzd='lazydocker'
+
+# Additional PATHs
+export PATH=$PATH:/usr/local/bin
+export PATH=$HOME/.npm-global/bin:$PATH
+export PATH="$PATH:$HOME/flutter/bin"
+export ANDROID_HOME="$HOME/android-sdk"
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+

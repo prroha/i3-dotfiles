@@ -43,7 +43,7 @@ exec --no-startup-id dunst
 exec --no-startup-id feh --bg-fill --no-fehbg ~/.config/i3/wallpaper.png 2>/dev/null
 
 # Autotiling — splits based on window dimensions (dwindle-like)
-exec --no-startup-id ~/.local/bin/autotiling
+exec_always --no-startup-id ~/.local/bin/autotiling
 
 # Set brightness on startup (requires brightnessctl: sudo dnf install brightnessctl)
 exec --no-startup-id brightnessctl set 40%
@@ -291,6 +291,16 @@ assign [class="Neovide"] → number $ws2
 assign [class="Alacritty"] → number $ws3
 assign [class="kitty"] → number $ws3
 assign [class="xterm"] → number $ws3
+
+# API / DB tools → 4
+assign [class="Postman"] → number $ws4
+assign [class="postman"] → number $ws4
+assign [class="Insomnia"] → number $ws4
+assign [class="DBeaver"] → number $ws4
+assign [class="MongoDB Compass"] → number $ws4
+assign [class="mongodb-compass"] → number $ws4
+assign [class="pgadmin4"] → number $ws4
+assign [class="Beekeeper Studio"] → number $ws4
 
 # Messaging → 9
 assign [class="Slack"] → number $ws9

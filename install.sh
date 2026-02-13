@@ -19,6 +19,37 @@ link() {
 echo "Installing dotfiles from $DOTFILES"
 echo
 
+# ─── Install packages ───
+echo "Installing required packages..."
+sudo dnf install -y i3 polybar alacritty conky rofi picom dunst feh \
+    brightnessctl flameshot ImageMagick i3lock neovim yazi jq zoxide
+
+pip install --user autotiling i3-workspace-names-daemon
+
+# ─── Install lazydocker ───
+if ! command -v lazydocker &>/dev/null; then
+    echo "Installing lazydocker..."
+    curl -s https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+else
+    echo "  lazydocker already installed"
+fi
+
+# ─── Install JetBrains Mono Nerd Font ───
+if ! fc-list | grep -qi "JetBrainsMono Nerd"; then
+    echo "Installing JetBrains Mono Nerd Font..."
+    mkdir -p ~/.local/share/fonts
+    curl -fLO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
+    tar xf JetBrainsMono.tar.xz -C ~/.local/share/fonts/
+    rm -f JetBrainsMono.tar.xz
+    fc-cache -f
+    echo "  Font installed"
+else
+    echo "  JetBrains Mono Nerd Font already installed"
+fi
+
+echo
+echo "Linking config files..."
+
 link .config/i3/config
 link .config/i3/lock.sh
 link .config/i3/powermenu.sh
@@ -35,6 +66,7 @@ link .config/conky/i3-shortcuts.conf
 link .config/rofi/config.rasi
 link .config/picom/picom.conf
 link .config/dunst/dunstrc
+link .mybashprofile
 link .Xresources
 link .gtkrc-2.0
 link .config/gtk-3.0/settings.ini
@@ -49,13 +81,25 @@ fi
 ln -sf "$DOTFILES/.config/nvim" "$dst"
 echo "  linked: $dst"
 
+# LazyVim — link entire directory
+dst="$HOME/.config/lazynvim"
+if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+    echo "  backup: $dst -> ${dst}.bak"
+    mv "$dst" "${dst}.bak"
+fi
+ln -sf "$DOTFILES/.config/lazynvim" "$dst"
+echo "  linked: $dst"
+
+# ─── Source mybashprofile from bashrc ───
+if ! grep -q 'mybashprofile' ~/.bashrc 2>/dev/null; then
+    echo '' >> ~/.bashrc
+    echo 'if [ -e $HOME/.mybashprofile ]; then' >> ~/.bashrc
+    echo '    source $HOME/.mybashprofile' >> ~/.bashrc
+    echo 'fi' >> ~/.bashrc
+    echo "  added: mybashprofile source line to ~/.bashrc"
+else
+    echo "  exists: mybashprofile already sourced in ~/.bashrc"
+fi
+
 echo
 echo "Done! Reload i3 with Mod+Shift+r"
-echo
-echo "Required packages (Fedora):"
-echo "  sudo dnf install i3 polybar alacritty conky rofi picom dunst feh brightnessctl flameshot ImageMagick i3lock neovim"
-echo "  pip install --user autotiling i3-workspace-names-daemon"
-echo "  Install JetBrains Mono Nerd Font:"
-echo "    mkdir -p ~/.local/share/fonts"
-echo "    curl -fLO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
-echo "    tar xf JetBrainsMono.tar.xz -C ~/.local/share/fonts/ && fc-cache -f"
