@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:JetBrains Mono 11
+font pango:JetBrainsMono Nerd Font 11
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -159,8 +159,7 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-# Pin workspace 5 to external monitor (if connected)
-workspace $ws5 output HDMI-1 DP-1 DP-2 eDP-1
+# Workspace 5 is pinned to external monitor dynamically via monitor.sh
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1

@@ -12,7 +12,7 @@
     frame_color = "#b4befe"
     separator_height = 2
     separator_color = frame
-    font = JetBrains Mono 10
+    font = JetBrainsMono Nerd Font 10
     corner_radius = 8
     icon_position = left
     max_icon_size = 48

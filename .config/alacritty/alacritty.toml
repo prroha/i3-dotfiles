@@ -2,7 +2,7 @@
 size = 14.0
 
 [font.normal]
-family = "JetBrains Mono"
+family = "JetBrainsMono Nerd Font"
 
 [colors.primary]
 background = "#1e1e2e"

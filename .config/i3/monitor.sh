@@ -57,4 +57,9 @@ case "$MODE" in
         ;;
 esac
 
+# Pin workspace 5 to external monitor
+if [ "$MODE" != "off" ]; then
+    i3-msg "workspace 5 output $EXTERNAL" 2>/dev/null
+fi
+
 notify-send "Monitor" "$EXTERNAL: $MODE"
