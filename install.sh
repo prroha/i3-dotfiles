@@ -118,6 +118,7 @@ link .config/i3/powermenu.sh
 link .config/i3/vol-up.sh
 link .config/i3/workspace-icons.json
 link .config/i3/monitor.sh
+link .config/i3/set-dpi.sh
 
 # Polybar
 link .config/polybar/config.ini
@@ -177,10 +178,10 @@ else
     echo "  exists: mybashprofile already sourced in ~/.bashrc"
 fi
 
-# ─── Apply Xresources ───
+# ─── Apply DPI settings ───
 echo
-echo "==> Applying Xresources..."
-xrdb -merge ~/.Xresources 2>/dev/null || echo "  WARNING: xrdb not available (will apply on next login)"
+echo "==> Detecting DPI and applying Xresources..."
+~/.config/i3/set-dpi.sh 2>/dev/null || echo "  WARNING: DPI detection failed (will apply on next login)"
 
 # ─── Touchpad natural scrolling + tap to click ───
 echo

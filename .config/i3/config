@@ -58,8 +58,8 @@ exec_always --no-startup-id ~/.local/bin/i3-workspace-names-daemon -config-path 
 bindsym XF86MonBrightnessUp exec --no-startup-id "brightnessctl set +5% && polybar-msg action brivol hook 0"
 bindsym XF86MonBrightnessDown exec --no-startup-id "brightnessctl set 5%- && polybar-msg action brivol hook 0"
 
-# Load Xresources for HiDPI scaling
-exec --no-startup-id xrdb -merge ~/.Xresources
+# Auto-detect DPI and apply Xresources
+exec --no-startup-id ~/.config/i3/set-dpi.sh
 
 # Volume controls (capped at 100% to prevent speaker damage)
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/vol-up.sh
