@@ -50,6 +50,28 @@ if ! sudo dnf install -y "${PACKAGES[@]}"; then
     done
 fi
 
+# ─── GPU drivers ───
+echo "==> Detecting GPU..."
+
+# AMD / Intel (mesa)
+if lspci | grep -qi "amd\|radeon\|intel.*graphics"; then
+    echo "  AMD/Intel GPU detected, installing mesa drivers..."
+    sudo dnf install -y mesa-dri-drivers mesa-vulkan-drivers 2>/dev/null || echo "  WARNING: mesa drivers install failed"
+fi
+
+# NVIDIA
+if lspci | grep -qi "nvidia"; then
+    echo "  NVIDIA GPU detected, installing drivers..."
+    # Enable RPM Fusion if not already
+    if ! dnf repolist | grep -q rpmfusion-nonfree; then
+        sudo dnf install -y \
+            "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
+            "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+    fi
+    sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia 2>/dev/null || echo "  WARNING: NVIDIA driver install failed"
+    echo "  NOTE: Reboot required for NVIDIA drivers to load"
+fi
+
 # ─── Python tools ───
 echo "==> Installing Python tools..."
 python3 -m pip install --user autotiling i3-workspace-names-daemon || echo "  WARNING: pip install failed"
