@@ -97,7 +97,7 @@ Press `Mod+Shift+r` to restart i3 and apply everything.
 | **1** | Browsers |
 | **2** | IDEs |
 | **3** | Terminals |
-| **4** | Misc |
+| **4** | API / DB tools (Postman, DBeaver, MongoDB Compass) |
 | **9** | Messaging (Slack, Discord, Telegram) |
 
 ## Tool cheatsheets
@@ -231,6 +231,63 @@ podman rm <id>                      # remove container
 podman rmi <image>                  # remove image
 podman logs <id>                    # view logs
 podman exec -it <id> bash           # shell into container
+```
+
+## Common commands / troubleshooting
+
+### WiFi
+```bash
+nmcli device wifi list                                    # list networks
+nmcli device wifi connect "SSID" password "PASSWORD"      # connect
+nmcli connection show                                     # saved connections
+nmcli device wifi show-password                           # show current wifi password
+```
+
+### Time / timezone
+```bash
+timedatectl                                               # check current time & timezone
+sudo timedatectl set-timezone Asia/Kathmandu              # set timezone
+sudo timedatectl set-ntp true                             # enable auto time sync
+```
+
+### Display / monitor
+```bash
+xrandr                                                    # list displays
+xrandr --output HDMI-1 --auto --right-of eDP-1           # external monitor right
+xrandr --output HDMI-1 --off                              # disable external monitor
+```
+
+### Audio
+```bash
+pactl list sinks short                                    # list audio outputs
+pactl set-sink-volume @DEFAULT_SINK@ +10%                 # volume up
+pactl set-sink-volume @DEFAULT_SINK@ -10%                 # volume down
+pactl set-sink-mute @DEFAULT_SINK@ toggle                 # mute toggle
+```
+
+### Packages
+```bash
+sudo dnf install <package>                                # install
+sudo dnf remove <package>                                 # remove
+sudo dnf search <keyword>                                 # search
+sudo dnf update                                           # update all
+```
+
+### Podman / Docker
+```bash
+systemctl --user enable --now podman.socket               # enable podman socket (for lazydocker)
+lzd                                                       # lazydocker TUI
+```
+
+### Useful aliases (from .mybashprofile)
+```bash
+dir          # yazi file manager
+y            # yazi with cd-on-quit
+z <partial>  # zoxide smart cd
+lzd          # lazydocker
+lazy         # LazyVim (nvim with LazyVim config)
+astro        # AstroNvim
+docker       # aliased to podman
 ```
 
 ## Resource usage
