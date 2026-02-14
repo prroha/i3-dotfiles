@@ -34,11 +34,17 @@ echo "==> Installing packages..."
 PACKAGES=(
     i3 polybar alacritty conky rofi picom dunst feh
     brightnessctl flameshot ImageMagick i3lock neovim
-    jq zoxide python3-pip unzip curl
+    git openssh-clients openssh-askpass
+    jq zoxide python3-pip unzip curl wget
+    xdg-utils xclip pavucontrol
+    ripgrep fd-find make gcc fastfetch lm_sensors
+    tlp tlp-rdw
     xrdb xrandr xss-lock
     pulseaudio-utils libnotify
     NetworkManager network-manager-applet nm-connection-editor
     keychain podman podman-compose
+    polkit-gnome
+    obs-studio
 )
 
 # Try all at once, fall back to one-by-one
@@ -167,6 +173,9 @@ link .config/rofi/config.rasi
 link .config/picom/picom.conf
 link .config/dunst/dunstrc
 
+# Dev stack (docker-compose)
+link devstack/docker-compose.yml
+
 # Shell profile
 link .mybashprofile
 
@@ -242,6 +251,35 @@ TZ_INPUT="${TZ_INPUT:-Asia/Kathmandu}"
 sudo timedatectl set-timezone "$TZ_INPUT"
 sudo timedatectl set-ntp true
 echo "  timezone: $TZ_INPUT, NTP enabled"
+
+# ─── TLP (battery management, 80% charge threshold) ───
+echo
+echo "==> Configuring TLP..."
+sudo systemctl enable tlp 2>/dev/null
+sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket 2>/dev/null
+if [ ! -f /etc/tlp.d/80-charge-threshold.conf ]; then
+    sudo mkdir -p /etc/tlp.d
+    sudo tee /etc/tlp.d/80-charge-threshold.conf > /dev/null <<'EOF'
+START_CHARGE_THRESH_BAT0=75
+STOP_CHARGE_THRESH_BAT0=80
+START_CHARGE_THRESH_BAT1=75
+STOP_CHARGE_THRESH_BAT1=80
+EOF
+    echo "  charge threshold set to 80%"
+else
+    echo "  TLP charge threshold already configured"
+fi
+
+# ─── Dev stack (Postgres + Redis) ───
+echo
+echo "==> Setting up dev stack..."
+read -p "  Enable pgvector (vector DB support) for PostgreSQL? [y/N]: " PGVECTOR
+if [[ "$PGVECTOR" =~ ^[Yy]$ ]]; then
+    sed -i 's|image: postgres:16-alpine|image: pgvector/pgvector:pg16|' ~/devstack/docker-compose.yml
+    echo "  PostgreSQL image set to pgvector/pgvector:pg16"
+else
+    echo "  Using standard PostgreSQL 16"
+fi
 
 # ─── Enable Podman socket (for lazydocker) ───
 echo

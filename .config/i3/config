@@ -33,6 +33,9 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- ~/.config/i3/lock.sh
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+# Polkit agent (password prompt for GUI apps needing privileges)
+exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
+
 # Compositor
 exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
 
@@ -132,7 +135,7 @@ bindsym $mod+f fullscreen toggle
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+e exec alacritty -e yazi
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle

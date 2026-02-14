@@ -17,6 +17,9 @@ alias lazy='NVIM_APPNAME=lazynvim nvim'
 # xdg-open shortcut
 alias open='xdg-open'
 
+# Quick command cheatsheet
+alias cheat='cat ~/dotfiles/cheatsheet'
+
 # Add ssh key (only if keychain and key exist)
 if command -v keychain &>/dev/null; then
     for key in ~/.ssh/id_* ~/.ssh/*-ssh-key; do
@@ -50,6 +53,11 @@ eval "$(zoxide init bash)"
 # Lazydocker (via Podman socket)
 export DOCKER_HOST=unix:///run/user/$(id -u)/podman/podman.sock
 alias lzd='lazydocker'
+
+# Dev stack (postgres + redis)
+alias devup='podman-compose -f ~/devstack/docker-compose.yml up -d'
+alias devdown='podman-compose -f ~/devstack/docker-compose.yml down'
+alias devps='podman-compose -f ~/devstack/docker-compose.yml ps'
 
 # Additional PATHs
 export PATH=$PATH:/usr/local/bin

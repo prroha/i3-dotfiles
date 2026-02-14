@@ -1,0 +1,83 @@
+── Linux Quick Reference ──
+
+WIFI
+  nmcli device wifi list                  scan networks
+  nmcli device wifi connect SSID password PASS
+  nmcli connection show                   saved connections
+  nmcli connection up NAME                reconnect
+  nmcli connection down NAME              disconnect
+  nmcli device status                     interface status
+
+DISKS
+  lsblk                                  list block devices
+  lsblk -f                               show filesystems
+  fdisk -l                               detailed partition info
+  df -h                                  disk free (human readable)
+  du -sh DIR                             directory size
+  du -sh * | sort -h                     sort contents by size
+
+MOUNT / UNMOUNT
+  sudo mount /dev/sdX1 /mnt/usb          mount partition
+  sudo mount -o uid=$(id -u),gid=$(id -g) /dev/sdX1 /mnt/usb   mount as user (FAT32)
+  sudo umount /mnt/usb                   unmount (always before unplug)
+
+FORMAT USB
+  sudo wipefs -a /dev/sdX                wipe signatures
+  sudo parted /dev/sdX --script mklabel msdos mkpart primary fat32 1MiB 100%
+  sudo mkfs.vfat -F 32 /dev/sdX1         format FAT32
+  sudo mkfs.ext4 /dev/sdX1               format ext4
+
+MEMORY / CPU
+  free -h                                memory usage
+  htop                                   interactive process viewer
+  top                                    process monitor
+  cat /proc/meminfo                      detailed memory info
+  vmstat                                 virtual memory stats
+
+SYSTEM INFO
+  uname -a                               kernel info
+  hostnamectl                            hostname and OS
+  lscpu                                  CPU info
+  lspci                                  PCI devices (GPUs etc)
+  lsusb                                  USB devices
+  sensors                                temperature (lm_sensors)
+
+SERVICES
+  systemctl status NAME                  check service
+  systemctl start/stop/restart NAME      control service
+  systemctl enable/disable NAME          auto-start on boot
+  journalctl -u NAME -f                  follow service logs
+
+PACKAGES (DNF)
+  sudo dnf install PKG                   install
+  sudo dnf remove PKG                    remove
+  sudo dnf search KEYWORD                search
+  sudo dnf update                        update all
+  dnf list installed                     list installed
+
+NETWORK
+  ip a                                   show IP addresses
+  ip link                                show interfaces
+  ss -tulnp                              listening ports
+  ping -c 3 HOST                         connectivity test
+  curl -I URL                            check URL headers
+
+FILES
+  find / -name "FILE" 2>/dev/null        find file by name
+  locate FILE                            fast find (needs updatedb)
+  tar czf archive.tar.gz DIR             compress
+  tar xzf archive.tar.gz                 extract
+  chmod +x FILE                          make executable
+  chown USER:GROUP FILE                  change ownership
+
+PROCESS
+  ps aux | grep NAME                     find process
+  kill PID                               graceful kill
+  kill -9 PID                            force kill
+  pkill NAME                             kill by name
+
+SSH
+  ssh user@host                          connect
+  ssh-keygen -t ed25519                  generate key
+  ssh-copy-id user@host                  copy key to server
+  scp file user@host:/path               copy file to remote
