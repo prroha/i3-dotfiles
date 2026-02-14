@@ -74,22 +74,45 @@ if lspci | grep -qi "nvidia"; then
             "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
             "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
     fi
-    sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-power || echo "  WARNING: NVIDIA driver install failed"
+    sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia || echo "  WARNING: NVIDIA driver install failed"
 
-    # Enable NVIDIA runtime power management (GPU powers off when idle)
-    if [ ! -f /etc/udev/rules.d/80-nvidia-pm.rules ]; then
-        sudo tee /etc/udev/rules.d/80-nvidia-pm.rules > /dev/null <<'EOF'
+    # Check if GPU supports runtime power management (Turing/GTX 1650+ or newer)
+    GPU_ID=$(lspci -nn | grep -i nvidia | grep -oP '\[10de:\K[0-9a-f]+' | head -1)
+    GPU_ID_DEC=$((16#${GPU_ID:-0}))
+
+    # Turing+ GPUs have device IDs starting from 0x1e00
+    if [ "$GPU_ID_DEC" -ge 7680 ] 2>/dev/null; then
+        echo "  Turing+ GPU detected, enabling runtime power management..."
+        sudo dnf install -y xorg-x11-drv-nvidia-power || echo "  WARNING: nvidia-power install failed"
+
+        if [ ! -f /etc/udev/rules.d/80-nvidia-pm.rules ]; then
+            sudo tee /etc/udev/rules.d/80-nvidia-pm.rules > /dev/null <<'EOF'
 # Enable runtime power management for NVIDIA GPU
 ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="auto"
 ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="auto"
 EOF
-        echo "  NVIDIA runtime power management configured"
+            echo "  NVIDIA runtime power management configured"
+        fi
+
+        sudo systemctl enable nvidia-suspend nvidia-resume nvidia-hibernate 2>/dev/null
+    else
+        echo "  Older NVIDIA GPU — no runtime power management support"
+        echo "  Disabling NVIDIA to save battery (integrated GPU handles everything)"
+        sudo tee /etc/modprobe.d/nvidia-disable.conf > /dev/null <<'EOF'
+# Disable NVIDIA GPU on older hardware to save battery
+# Remove this file and reboot to re-enable NVIDIA
+blacklist nouveau
+blacklist nvidia
+blacklist nvidia_drm
+blacklist nvidia_modeset
+alias nouveau off
+alias nvidia off
+EOF
+        echo "  NVIDIA disabled. To re-enable: sudo rm /etc/modprobe.d/nvidia-disable.conf && reboot"
     fi
 
-    # Enable NVIDIA persistence and power services
-    sudo systemctl enable nvidia-suspend nvidia-resume nvidia-hibernate 2>/dev/null
-    echo "  NOTE: Reboot required for NVIDIA drivers to load"
-    echo "  Use 'gpu <command>' to run apps on NVIDIA GPU"
+    echo "  NOTE: Reboot required for changes to take effect"
+    echo "  Newer GPUs: use 'gpu <command>' to run apps on NVIDIA"
 fi
 
 # ─── Python tools ───
