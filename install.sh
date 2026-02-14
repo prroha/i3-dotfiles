@@ -158,6 +158,7 @@ link .config/i3/vol-up.sh
 link .config/i3/workspace-icons.json
 link .config/i3/monitor.sh
 link .config/i3/set-dpi.sh
+link .config/i3/battery-monitor.sh
 
 # Polybar
 link .config/polybar/config.ini
@@ -280,6 +281,11 @@ if [[ "$PGVECTOR" =~ ^[Yy]$ ]]; then
 else
     echo "  Using standard PostgreSQL 16"
 fi
+
+# ─── Disable PackageKit (not needed on i3, silences "command not found" errors) ───
+echo
+echo "==> Masking PackageKit..."
+sudo systemctl mask packagekit 2>/dev/null && echo "  PackageKit masked" || echo "  already masked"
 
 # ─── Enable Podman socket (for lazydocker) ───
 echo
