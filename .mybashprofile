@@ -34,6 +34,14 @@ fi
 alias docker=podman
 alias docker-compose=podman-compose
 
+# Run app on NVIDIA GPU (e.g. gpu firefox)
+alias gpu='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia'
+
+# Apps that auto-use NVIDIA GPU
+alias obs='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia obs'
+alias blender='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia blender'
+alias kdenlive='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia kdenlive'
+
 # Yazi file manager
 alias dir='yazi'
 

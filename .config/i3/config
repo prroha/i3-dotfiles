@@ -316,6 +316,9 @@ assign [class="teams-for-linux"] → number $ws9
 assign [class="Microsoft Teams"] → number $ws9
 assign [class="Ferdium"] → number $ws9
 assign [class="whatsapp-for-linux"] → number $ws9
+assign [class="zoom"] → number $ws9
+assign [class="Zoom"] → number $ws9
+assign [class="ViberPC"] → number $ws9
 
 # ─── Floating rules ───
 for_window [window_role="pop-up"] floating enable

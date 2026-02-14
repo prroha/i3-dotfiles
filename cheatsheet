@@ -1,5 +1,12 @@
 ── Linux Quick Reference ──
 
+GPU (NVIDIA PRIME)
+  gpu <command>                           run app on NVIDIA GPU
+  gpu obs                                 OBS on dedicated GPU
+  gpu firefox                             browser on dedicated GPU
+  nvidia-smi                              check NVIDIA GPU status
+  cat /sys/bus/pci/devices/*/power/runtime_status   check if GPU is suspended
+
 WIFI
   nmcli device wifi list                  scan networks
   nmcli device wifi connect SSID password PASS

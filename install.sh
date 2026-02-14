@@ -74,8 +74,22 @@ if lspci | grep -qi "nvidia"; then
             "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
             "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
     fi
-    sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia || echo "  WARNING: NVIDIA driver install failed"
+    sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-power || echo "  WARNING: NVIDIA driver install failed"
+
+    # Enable NVIDIA runtime power management (GPU powers off when idle)
+    if [ ! -f /etc/udev/rules.d/80-nvidia-pm.rules ]; then
+        sudo tee /etc/udev/rules.d/80-nvidia-pm.rules > /dev/null <<'EOF'
+# Enable runtime power management for NVIDIA GPU
+ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="auto"
+ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="auto"
+EOF
+        echo "  NVIDIA runtime power management configured"
+    fi
+
+    # Enable NVIDIA persistence and power services
+    sudo systemctl enable nvidia-suspend nvidia-resume nvidia-hibernate 2>/dev/null
     echo "  NOTE: Reboot required for NVIDIA drivers to load"
+    echo "  Use 'gpu <command>' to run apps on NVIDIA GPU"
 fi
 
 # ─── Python tools ───
