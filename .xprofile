@@ -1,0 +1,5 @@
+#!/bin/bash
+# Sourced by display manager before window manager starts
+# Sets DPI + GTK/Qt scaling env vars so all apps inherit them
+
+source ~/.config/i3/set-dpi.sh >/dev/null 2>&1

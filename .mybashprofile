@@ -20,15 +20,6 @@ alias open='xdg-open'
 # Quick command cheatsheet
 alias cheat='cat ~/dotfiles/cheatsheet'
 
-# Add ssh key (only if keychain and key exist)
-if command -v keychain &>/dev/null; then
-    for key in ~/.ssh/id_* ~/.ssh/*-ssh-key; do
-        if [ -f "$key" ] && [[ "$key" != *.pub ]]; then
-            eval "$(keychain --eval --agents ssh "$(basename "$key")")"
-            break
-        fi
-    done
-fi
 
 #Map podman to docker
 alias docker=podman
