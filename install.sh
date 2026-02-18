@@ -313,12 +313,16 @@ fi
 # ─── Dev stack (Postgres + Redis) ───
 echo
 echo "==> Setting up dev stack..."
-read -p "  Enable pgvector (vector DB support) for PostgreSQL? [y/N]: " PGVECTOR
-if [[ "$PGVECTOR" =~ ^[Yy]$ ]]; then
-    sed -i 's|image: postgres:16-alpine|image: pgvector/pgvector:pg16|' ~/devstack/docker-compose.yml
-    echo "  PostgreSQL image set to pgvector/pgvector:pg16"
+if podman ps -a --format '{{.Names}}' 2>/dev/null | grep -q postgres; then
+    echo "  PostgreSQL container already exists, skipping image selection"
 else
-    echo "  Using standard PostgreSQL 16"
+    read -p "  Enable pgvector (vector DB support) for PostgreSQL? [y/N]: " PGVECTOR
+    if [[ "$PGVECTOR" =~ ^[Yy]$ ]]; then
+        sed -i 's|image: postgres:16-alpine|image: pgvector/pgvector:pg16|' ~/devstack/docker-compose.yml
+        echo "  PostgreSQL image set to pgvector/pgvector:pg16"
+    else
+        echo "  Using standard PostgreSQL 16"
+    fi
 fi
 
 # ─── Disable PackageKit (not needed on i3, silences "command not found" errors) ───
