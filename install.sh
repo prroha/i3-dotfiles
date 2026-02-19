@@ -292,22 +292,37 @@ sudo timedatectl set-timezone "$TZ_INPUT"
 sudo timedatectl set-ntp true
 echo "  timezone: $TZ_INPUT, NTP enabled"
 
-# ─── TLP (battery management, 80% charge threshold) ───
+# ─── TLP (battery management + power optimization) ───
 echo
 echo "==> Configuring TLP..."
 sudo systemctl enable tlp 2>/dev/null
 sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket 2>/dev/null
-if [ ! -f /etc/tlp.d/80-charge-threshold.conf ]; then
-    sudo mkdir -p /etc/tlp.d
-    sudo tee /etc/tlp.d/80-charge-threshold.conf > /dev/null <<'EOF'
-START_CHARGE_THRESH_BAT0=75
+# Disable tuned (conflicts with TLP)
+sudo systemctl disable --now tuned 2>/dev/null
+sudo systemctl mask tuned 2>/dev/null
+
+sudo mkdir -p /etc/tlp.d
+
+# Charge thresholds (40-80% for battery longevity)
+sudo tee /etc/tlp.d/80-charge-threshold.conf > /dev/null <<'EOF'
+START_CHARGE_THRESH_BAT0=40
 STOP_CHARGE_THRESH_BAT0=80
-START_CHARGE_THRESH_BAT1=75
-STOP_CHARGE_THRESH_BAT1=80
 EOF
-    echo "  charge threshold set to 80%"
+echo "  charge threshold set to 40-80%"
+
+# Optimized power config
+sudo cp "$DOTFILES/etc/tlp.d/02-optimized.conf" /etc/tlp.d/02-optimized.conf
+echo "  optimized TLP config installed"
+
+# ─── Deep sleep (S3 suspend) ───
+echo
+echo "==> Configuring deep sleep..."
+if ! grep -q 'mem_sleep_default=deep' /etc/default/grub; then
+    sudo sed -i 's/GRUB_CMDLINE_LINUX="/GRUB_CMDLINE_LINUX="mem_sleep_default=deep /' /etc/default/grub
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    echo "  deep sleep enabled (takes effect after reboot)"
 else
-    echo "  TLP charge threshold already configured"
+    echo "  deep sleep already configured"
 fi
 
 # ─── Dev stack (Postgres + Redis) ───
