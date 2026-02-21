@@ -32,9 +32,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- ~/.config/i3/lock.sh
 # Battery monitor (warn at 15%, suspend at 7%)
 exec --no-startup-id ~/.config/i3/battery-monitor.sh
 
-# NetworkManager is the most popular way to manage wireless networks on Linux,
-# and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
+# NetworkManager — use nmcli/nmtui when needed (nm-applet removed to save ~42MB)
 
 # Polkit agent (password prompt for GUI apps needing privileges)
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
@@ -348,9 +346,9 @@ for_window [title="File Transfer*"] floating enable
 for_window [title="Open File"] floating enable
 for_window [title="Save As"] floating enable
 
-# Disable default i3bar
+# Disable i3bar entirely (/bin/true exits immediately, no process spawned)
 bar {
-        mode invisible
+        i3bar_command /bin/true
 }
 
 # Launch polybar (replaces i3bar)

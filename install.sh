@@ -351,6 +351,14 @@ sudo cp "$DOTFILES/etc/udev/rules.d/99-power-switch.rules" /etc/udev/rules.d/
 sudo udevadm control --reload-rules
 echo "  picom power-switch udev rule installed"
 
+# Disable rsyslogd — journald handles all logging, rsyslogd is redundant (~50MB RAM + disk I/O)
+if systemctl is-active rsyslog &>/dev/null; then
+    sudo systemctl disable --now rsyslog
+    echo "  rsyslogd disabled (journald handles logging)"
+else
+    echo "  rsyslogd already disabled"
+fi
+
 # ─── Dev stack (Postgres + Redis) ───
 echo
 echo "==> Setting up dev stack..."
