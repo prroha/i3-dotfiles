@@ -1,0 +1,10 @@
+[Unit]
+Description=Disable Thunderbolt ACPI wakeup devices to save power during suspend
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'grep -E "^(TXHC|TDM|TRP)" /proc/acpi/wakeup | while read -r dev rest; do if echo "$rest" | grep -q enabled; then echo "$dev" > /proc/acpi/wakeup; fi; done'
+
+[Install]
+WantedBy=multi-user.target

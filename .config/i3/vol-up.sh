@@ -6,3 +6,4 @@ if [ "$vol" -lt 100 ]; then
     pactl set-sink-volume @DEFAULT_SINK@ ${new}%
 fi
 polybar-msg action brivol hook 0 &
+~/.config/i3/osd-notify.sh volume &

@@ -11,7 +11,7 @@ while true; do
 
     if [ -z "$BAT" ] || [ "$STATUS" = "Charging" ] || [ "$STATUS" = "Full" ]; then
         WARNED=false
-        sleep 60
+        sleep 300
         continue
     fi
 

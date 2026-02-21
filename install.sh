@@ -314,16 +314,42 @@ echo "  charge threshold set to 40-80%"
 sudo cp "$DOTFILES/etc/tlp.d/02-optimized.conf" /etc/tlp.d/02-optimized.conf
 echo "  optimized TLP config installed"
 
-# ─── Deep sleep (S3 suspend) ───
+# ─── Sleep & power config ───
+# Using s2idle (Modern Standby) — default on 13th gen Intel.
+# S3 deep sleep causes wake-from-lid issues on ASUS Zenbook UX3404VA.
 echo
-echo "==> Configuring deep sleep..."
-if ! grep -q 'mem_sleep_default=deep' /etc/default/grub; then
-    sudo sed -i 's/GRUB_CMDLINE_LINUX="/GRUB_CMDLINE_LINUX="mem_sleep_default=deep /' /etc/default/grub
-    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-    echo "  deep sleep enabled (takes effect after reboot)"
-else
-    echo "  deep sleep already configured"
+echo "==> Configuring kernel power parameters..."
+# Remove deep sleep if present, add workqueue.power_efficient
+if grep -q 'mem_sleep_default=deep' /etc/default/grub; then
+    sudo sed -i 's/mem_sleep_default=deep //' /etc/default/grub
+    echo "  removed mem_sleep_default=deep"
 fi
+if ! grep -q 'workqueue.power_efficient=1' /etc/default/grub; then
+    sudo sed -i 's/GRUB_CMDLINE_LINUX="/GRUB_CMDLINE_LINUX="workqueue.power_efficient=1 /' /etc/default/grub
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    echo "  workqueue.power_efficient=1 added (takes effect after reboot)"
+else
+    echo "  workqueue.power_efficient already configured"
+fi
+
+echo
+echo "==> Disabling Thunderbolt wakeup devices..."
+sudo cp "$DOTFILES/etc/systemd/system/disable-thunderbolt-wakeup.service" /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable disable-thunderbolt-wakeup.service 2>/dev/null
+echo "  Thunderbolt wakeup disabled (TXHC, TDM0, TDM1, TRP0, TRP2)"
+
+# Reduce disk write wakeups (powertop recommendation)
+echo "vm.dirty_writeback_centisecs = 1500" | sudo tee /etc/sysctl.d/60-dirty-writeback.conf > /dev/null
+sudo sysctl -q vm.dirty_writeback_centisecs=1500
+echo "  vm.dirty_writeback_centisecs set to 1500"
+
+# Picom power-aware switching (AC: full effects, battery: minimal)
+sudo cp "$DOTFILES/.config/i3/power-switch.sh" /usr/local/bin/picom-power-switch
+sudo chmod +x /usr/local/bin/picom-power-switch
+sudo cp "$DOTFILES/etc/udev/rules.d/99-power-switch.rules" /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+echo "  picom power-switch udev rule installed"
 
 # ─── Dev stack (Postgres + Redis) ───
 echo

@@ -11,9 +11,13 @@ d_idle=$((idle2-idle))
 d_total=$((total2-total))
 cpu=$(( (d_total-d_idle) * 100 / (d_total > 0 ? d_total : 1) ))
 
-# Memory
-tm=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
-am=$(awk '/MemAvailable/ {print $2}' /proc/meminfo)
+# Memory (no awk — read directly)
+while read -r key val _; do
+    case "$key" in
+        MemTotal:) tm=$val ;;
+        MemAvailable:) am=$val; break ;;
+    esac
+done < /proc/meminfo
 mem=$(( (tm-am) * 100 / tm ))
 
 # Dynamic colors
@@ -39,9 +43,9 @@ W=${#label}
 cf=$((cpu * W / 100))
 mf=$((mem * W / 100))
 
-# Find where M starts in the label
-mpos=$(expr index "$label" M)
-mpos=$((mpos - 1))
+# Find where M starts in the label (no expr)
+prefix="${label%%M*}"
+mpos=${#prefix}
 
 out=""
 for ((i=0; i<W; i++)); do

@@ -39,11 +39,14 @@ exec --no-startup-id nm-applet
 # Polkit agent (password prompt for GUI apps needing privileges)
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
 
-# Compositor
-exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
+# Compositor (battery-aware: minimal effects on battery, full on AC)
+exec --no-startup-id ~/.config/i3/picom-start.sh
 
 # Notifications
 exec --no-startup-id dunst
+
+# Inhibit screen blanking when fullscreen (e.g. watching videos)
+exec --no-startup-id ~/.config/i3/caffeine.sh
 
 # Wallpaper
 exec --no-startup-id feh --bg-fill --no-fehbg ~/.config/i3/wallpaper.png 2>/dev/null
@@ -67,14 +70,13 @@ exec --no-startup-id ~/.config/i3/resume-hook.sh
 exec_always --no-startup-id ~/.local/bin/i3-workspace-names-daemon -config-path ~/.config/i3/workspace-icons.json -d " " -u -n
 
 # Brightness controls
-bindsym XF86MonBrightnessUp exec --no-startup-id "brightnessctl set +5% && polybar-msg action brivol hook 0"
-bindsym XF86MonBrightnessDown exec --no-startup-id "brightnessctl set 5%- && polybar-msg action brivol hook 0"
-
+bindsym XF86MonBrightnessUp exec --no-startup-id "brightnessctl set +5% && polybar-msg action brivol hook 0 && ~/.config/i3/osd-notify.sh brightness"
+bindsym XF86MonBrightnessDown exec --no-startup-id "brightnessctl set 5%- && polybar-msg action brivol hook 0 && ~/.config/i3/osd-notify.sh brightness"
 
 # Volume controls (capped at 100% to prevent speaker damage)
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/vol-up.sh
-bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume @DEFAULT_SINK@ -10% && polybar-msg action brivol hook 0"
-bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute @DEFAULT_SINK@ toggle && polybar-msg action brivol hook 0"
+bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume @DEFAULT_SINK@ -10% && polybar-msg action brivol hook 0 && ~/.config/i3/osd-notify.sh volume"
+bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute @DEFAULT_SINK@ toggle && polybar-msg action brivol hook 0 && ~/.config/i3/osd-notify.sh volume"
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # Use Mouse+$mod to drag floating windows to their wanted position
